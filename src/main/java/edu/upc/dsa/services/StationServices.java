@@ -159,7 +159,39 @@ public class StationServices {
     }
 
 
-    
+    @POST
+    @ApiOperation(value = "create a new Station", notes = "asdasd")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response=Station.class)
+    })
+
+    @Path("/addstation")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response newStation(String idStation, String description, int max, double lat, double lon) {
+        Station station = new  Station(idStation,description,max,lat,lon);
+        this.mb.addStation(idStation,description,max,lat,lon);
+        return Response.status(201).entity(station).build();
+    }
+
+    @POST
+    @ApiOperation(value = "create a new Bike", notes = "asdasd")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response=Bike.class)
+    })
+
+    @Path("/addbike")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response newBike(String idBike, String description, double kms, String idStation) {
+        Bike bike = new  Bike(idBike,description,kms,idStation);
+        try {
+            this.mb.addBike(idBike,description,kms,idStation);
+        } catch (StationFullException e) {
+            e.printStackTrace();
+        } catch (StationNotFoundException e) {
+            e.printStackTrace();
+        }
+        return Response.status(201).entity(bike).build();
+    }
 
 
 
