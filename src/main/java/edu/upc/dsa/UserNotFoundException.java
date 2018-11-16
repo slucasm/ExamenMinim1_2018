@@ -1,4 +1,4 @@
 package edu.upc.dsa;
 
-public class UserNotFoundException {
+public class UserNotFoundException extends Exception {
 }

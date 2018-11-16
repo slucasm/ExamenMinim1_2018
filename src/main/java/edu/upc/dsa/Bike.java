@@ -47,4 +47,10 @@ public class Bike {
     public void setIdStation(String idStation) {
         this.idStation = idStation;
     }
+
+
+    @Override
+    public String toString() {
+        return "Bike [idBike = " + idBike + ", Description = " + description +", Kms = " + kms +", idStation = " +idStation+ "]";
+    }
 }

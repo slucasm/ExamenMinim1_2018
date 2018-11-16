@@ -1,4 +1,5 @@
 package edu.upc.dsa;
+import java.util.HashMap;
 import java.util.List;
 
 public interface MyBike {
@@ -100,4 +101,9 @@ public interface MyBike {
      * clear all the data structures
      */
     void clear();
+
+    int size();
+
+    List<Station> allStations();
+    HashMap<String,User> allUsers();
 }

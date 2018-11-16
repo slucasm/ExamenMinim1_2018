@@ -1,8 +1,8 @@
+package  edu.upc.dsa;
+
 import edu.upc.dsa.*;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.log4j.Logger;
+import org.junit.*;
 
 import java.util.List;
 
@@ -11,6 +11,8 @@ public class MyBikeTest {
 
     @Before
     public void setUp() throws Exception {
+
+        final Logger log = Logger.getLogger(MyBikeImpl.class.getName());
         this.mb = MyBikeImpl.getInstance();
         this.mb.addUser("user1", "Juan", "Lopex");
 
@@ -35,7 +37,7 @@ public class MyBikeTest {
 
     @After
     public void tearDown(){
-        this.mb.clear();
+        this.mb = null;
     }
 
     @Test
@@ -87,13 +89,13 @@ public class MyBikeTest {
 
         List<Bike> bikes = this.mb.bikesByStationOrderByKms("Station1");
 
-        Assert.assertEquals("bike103", bikes.get(0).getBikeId());
+        Assert.assertEquals("bike103", bikes.get(0).getIdBike());
         Assert.assertEquals(10, bikes.get(0).getKms(),1);
 
-        Assert.assertEquals("bike101", bikes.get(1).getBikeId());
+        Assert.assertEquals("bike101", bikes.get(1).getIdBike());
         Assert.assertEquals(25, bikes.get(1).getKms(),1);
 
-        Assert.assertEquals("bike102", bikes.get(2).getBikeId());
+        Assert.assertEquals("bike102", bikes.get(2).getIdBike());
         Assert.assertEquals(70, bikes.get(2).getKms(),1);
     }
 
@@ -101,17 +103,17 @@ public class MyBikeTest {
     public void testGetBikes() throws Exception {
 
         Bike b1 = this.mb.getBike("Station1", "user1");
-        Assert.assertEquals("bike101", b1.getBikeId());
+        Assert.assertEquals("bike101", b1.getIdBike());
         Assert.assertEquals(2, this.mb.numBikes("Station1"));
 
         Bike b2 = this.mb.getBike("Station2", "user1");
-        Assert.assertEquals("bike201", b2.getBikeId());
+        Assert.assertEquals("bike201", b2.getIdBike());
         Assert.assertEquals(2, this.mb.numBikes("Station1"));
 
         List<Bike> bikes = this.mb.bikesByUser("user1");
 
-        Assert.assertEquals("bike101", bikes.get(0).getBikeId());
-        Assert.assertEquals("bike201", bikes.get(1).getBikeId());
+        Assert.assertEquals("bike101", bikes.get(0).getIdBike());
+        Assert.assertEquals("bike201", bikes.get(1).getIdBike());
 
     }
 

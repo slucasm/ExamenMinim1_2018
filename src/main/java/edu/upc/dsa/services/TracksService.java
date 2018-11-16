@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Api(value = "/tracks", description = "Endpoint to Track Service")
+/**@Api(value = "/tracks", description = "Endpoint to Track Service")
 @Path("/tracks")
 public class TracksService {
 
@@ -102,3 +102,4 @@ public class TracksService {
     }
 
 }
+ */

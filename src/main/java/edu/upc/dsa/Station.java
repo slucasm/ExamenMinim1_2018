@@ -10,7 +10,7 @@ public class Station {
     int max;
     double lat;
     double lon;
-    LinkedList<Bike> listaBikes;
+    LinkedList<Bike> listaBikes = new LinkedList<>();
 
     public Station(String idStation, String description, int max, double lat, double lon){
         this.idStation = idStation;
@@ -65,5 +65,11 @@ public class Station {
     }
     public void addBike(Bike bike){
         this.listaBikes.add(bike);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Station [idStation = " + idStation + ", Description = " + description +", Max = " + max +", Latitud = " +lat+ ", Longitud = " +lon+"]";
     }
 }

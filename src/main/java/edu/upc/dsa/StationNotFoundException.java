@@ -1,4 +1,4 @@
 package edu.upc.dsa;
 
-public class StationNotFoundException {
+public class StationNotFoundException extends Exception {
 }
