@@ -1,3 +1,4 @@
+package edu.upc.dsa;
 import java.util.List;
 
 public interface MyBike {
@@ -5,7 +6,7 @@ public interface MyBike {
     /**
      * number of stations
      */
-    public static final int S = 10;
+    static final int S = 10;
 
     /**
      * Add a new User
@@ -14,7 +15,7 @@ public interface MyBike {
      * @param name name of the user
      * @param surname surname of the user
      */
-    public void addUser(String idUser, String name, String surname);
+    void addUser(String idUser, String name, String surname);
 
 
     /**
@@ -26,7 +27,7 @@ public interface MyBike {
      * @param lat lattitude GPS
      * @param lon longitude GPS
      */
-    public void addStation(String idStation, String description, int max, double lat, double lon);
+    void addStation(String idStation, String description, int max, double lat, double lon);
 
 
     /**
@@ -39,7 +40,7 @@ public interface MyBike {
      * @throws StationFullException  if the station is full
      * @throws StationNotFoundException if the station doesn't exist
      */
-    public void addBike(String idBike, String description, double kms, String idStation) throws StationFullException, StationNotFoundException;
+    void addBike(String idBike, String description, double kms, String idStation) throws StationFullException, StationNotFoundException;
 
 
     /**
@@ -49,7 +50,7 @@ public interface MyBike {
      * @return list of bikes
      * @throws StationNotFoundException if the station doesn't exist
      */
-    public List<Bike> bikesByStationOrderByKms(String idStation) throws StationNotFoundException;
+    List<Bike> bikesByStationOrderByKms(String idStation) throws StationNotFoundException;
 
     /**
      * get the first Bike of the station
@@ -60,7 +61,7 @@ public interface MyBike {
      * @throws UserNotFoundException if the user doesn't exist
      * @throws StationNotFoundException if the station doesn't exist
      */
-    public Bike getBike(String stationId, String userId) throws UserNotFoundException, StationNotFoundException;
+    Bike getBike(String stationId, String userId) throws UserNotFoundException, StationNotFoundException;
 
     /**
      * get the bikes used by the user
@@ -69,7 +70,7 @@ public interface MyBike {
      * @return the list of bikes used by the user
      * @throws UserNotFoundException if the user doesn't exist
      */
-    public List<Bike> bikesByUser(String userId) throws UserNotFoundException;
+    List<Bike> bikesByUser(String userId) throws UserNotFoundException;
 
 
     /**
@@ -77,14 +78,14 @@ public interface MyBike {
      *
      * @return the number of users
      */
-    public int numUsers();
+    int numUsers();
 
     /**
      * get the number of stations
      *
      * @return the number of stations
      */
-    public int numStations();
+    int numStations();
 
     /**
      * get the number of bikes in a station
@@ -93,10 +94,10 @@ public interface MyBike {
      * @return the number of bikes of the station
      * @throws StationNotFoundException if the station doesn't exist
      */
-    public int numBikes(String idStation) throws StationNotFoundException;
+    int numBikes(String idStation) throws StationNotFoundException;
 
     /**
      * clear all the data structures
      */
-    public void clear();
+    void clear();
 }
