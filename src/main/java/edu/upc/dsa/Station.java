@@ -10,7 +10,7 @@ public class Station {
     int max;
     double lat;
     double lon;
-    LinkedList<Bike> listaBikes = new LinkedList<>();
+    private List<Bike> listaBikes = new LinkedList<>();
 
     public Station(String idStation, String description, int max, double lat, double lon){
         this.idStation = idStation;
@@ -19,6 +19,7 @@ public class Station {
         this.lat = lat;
         this.lon = lon;
     }
+    public Station(){}
 
     public String getIdStation() {
         return idStation;
@@ -60,12 +61,30 @@ public class Station {
         this.lon = lon;
     }
 
-    public LinkedList<Bike> getListaBikes() {
+    public List<Bike> getListaBikes() {
         return listaBikes;
     }
     public void addBike(Bike bike){
-        this.listaBikes.add(bike);
+
+        if(listaBikes.size() < this.max){
+            this.listaBikes.add(bike);
+        }
+        else{
+        }
     }
+
+    public Bike getBike(){
+        if (listaBikes.size()!= 0){
+            Bike bike = listaBikes.get(0);
+            listaBikes.remove(0);
+            return bike;
+        }
+        else{
+            return null;
+        }
+    }
+
+
 
 
     @Override

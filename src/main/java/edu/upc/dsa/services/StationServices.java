@@ -21,7 +21,7 @@ import java.util.List;
 @Path("/stations")
 public class StationServices {
 
-    private MyBike mb;
+    /*private MyBike mb;
 
     public StationServices(){
         this.mb = MyBikeImpl.getInstance();
@@ -198,6 +198,6 @@ public class StationServices {
 
 
 
-
+*/
 
 }

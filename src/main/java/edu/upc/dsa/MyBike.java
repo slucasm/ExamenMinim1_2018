@@ -102,8 +102,4 @@ public interface MyBike {
      */
     void clear();
 
-    int size();
-
-    List<Station> allStations();
-    HashMap<String,User> allUsers();
 }

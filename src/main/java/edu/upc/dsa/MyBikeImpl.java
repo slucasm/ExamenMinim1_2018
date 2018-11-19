@@ -9,19 +9,23 @@ public class MyBikeImpl implements  MyBike {
 
     final static Logger log = Logger.getLogger(MyBikeImpl.class.getName());
 
-    private static MyBike instance;
+    private static MyBikeImpl instance;
 
     private HashMap<String,User> userMap;
-    private ArrayList<Station> stations;
+    private Station[] stations;
+    private int sizeArray;
 
 
-    private MyBikeImpl(){
+    private MyBikeImpl(int S){
         this.userMap = new HashMap<>();
-        this.stations = new ArrayList<>();
+        this.stations = new Station[S];
+        this.sizeArray = 0;
     }
 
     public static MyBike getInstance(){
-        if(instance==null) instance = new MyBikeImpl();
+        if(instance==null) {
+            instance = new MyBikeImpl(MyBike.S);
+        }
         return instance;
     }
 
@@ -29,7 +33,7 @@ public class MyBikeImpl implements  MyBike {
         log.info("User added: "+idUser);
         User usuario = new User(idUser,name,surname);
         userMap.put(idUser,usuario);
-        log.info("Number of user: " +userMap.size());
+        log.info("Number of users: " +userMap.size());
     }
     public int numUsers(){
         log.info("Number of users: " + userMap.size());
@@ -37,89 +41,83 @@ public class MyBikeImpl implements  MyBike {
     }
 
     public void addStation(String idStation, String description, int max, double lat, double lon) {
-        log.info("Station added: "+idStation);
         Station station = new Station(idStation, description, max, lat, lon);
-        stations.add(station);
-        log.info("Number of stations: " +stations.size());
+        boolean isfull = true;
+        for(int i = 0; i < stations.length;i++){
+            if (stations[i] == null){
+                log.info("Station added: "+idStation);
+                stations[i] = station;
+                sizeArray ++;
+                log.info("Number of stations: " +sizeArray);
+                isfull = false;
+                break;
+            }
+            else{}
+        }
+        if (isfull == true){
+            log.warn("Array of stations is full");
+        }
+        else{}
+
+
     }
     public int numStations(){
-        log.info("Number of stations: " +stations.size());
-        return stations.size();
+        log.info("Number of stations: " +sizeArray);
+        return sizeArray;
     }
 
 
     public int numBikes(String idStation) throws StationNotFoundException {
-        int size = 0;
         boolean stationNotFound = true;
-        for (int i = 0; i < stations.size();i++) {
-            String nombreStation = this.stations.get(i).getIdStation();
-            if (nombreStation.equals(idStation)) {
+        int size = 0;
+        for(int i = 0; i < stations.length;i++){
+            if (idStation.equals(stations[i].getIdStation())){
+                log.info("Number of bikes: " +stations[i].getListaBikes().size());
                 stationNotFound = false;
-                List<Bike> listabikes = this.stations.get(i).getListaBikes();
-                if (listabikes != null){
-                    size = listabikes.size();
-                }
-                else {}
-
+                size = stations[i].getListaBikes().size();
                 break;
             }
+            else{}
         }
-        if(stationNotFound == false) {}
+        if(stationNotFound == false) {
+            return size;
+        }
         else{
-            throw new StationNotFoundException();
+            throw new StationNotFoundException("The station is not found");
         }
 
-        log.info("Number of bikes: " +size);
-        return size;
     }
 
     public void clear() {
-        instance = new MyBikeImpl();
+        int S = instance.stations.length;
+        instance = new MyBikeImpl(S);
     }
 
-    public int size() {
-        return stations.size();
-    }
-
-    @Override
-    public List<Station> allStations() {
-        return stations;
-    }
-
-
-    public HashMap<String, User> allUsers() {
-        return userMap;
-    }
 
     public void addBike(String idBike, String description, double kms, String idStation) throws StationFullException, StationNotFoundException {
         Bike bike = new Bike(idBike, description, kms, idStation);
         boolean stationNotFound = true;
-        for (int i = 0; i < stations.size();i++) {
-            String id = this.stations.get(i).idStation;
-            if(id.equals(this.stations.get(i).idStation)){
+        for (int i = 0; i < sizeArray;i++) {
+            String id = this.stations[i].idStation;
+            if(idStation.equals(this.stations[i].idStation)){
                 stationNotFound = false;
-                List<Bike> listaBikesStation = this.stations.get(i).getListaBikes();
-                if (listaBikesStation == null){
-                    this.stations.get(i).addBike(bike);
+                List<Bike> listaBikesStation = this.stations[i].getListaBikes();
+                if (listaBikesStation.size() < this.stations[i].getMax()){
+                    this.stations[i].addBike(bike);
                     log.info("Bike added to station: "+idStation);
+                    break;
                 }
                 else {
-                    if (listaBikesStation.size() < this.stations.get(i).getMax())
-                    {
-                        this.stations.get(i).addBike(bike);
-                        log.info("Bike added to station: "+idStation);
-                    }
-                    else{
-                        log.info("The station is full");
-                        throw new StationFullException();
-                    }
+                    log.info("The station is full");
+                    throw new StationFullException("The station is full of bikes");
                 }
 
             }
+            else{}
         }
         if (stationNotFound == false){}
         else{
-          throw new StationNotFoundException();
+          throw new StationNotFoundException("The station is not found");
         }
 
     }
@@ -127,52 +125,56 @@ public class MyBikeImpl implements  MyBike {
     public List<Bike> bikesByStationOrderByKms(String idStation) throws StationNotFoundException {
         List<Bike> listaBikes = new LinkedList<>();
         boolean stationNotFound = true;
-        for (int i = 0; i < stations.size();i++){
-            String nombreStation = this.stations.get(i).getIdStation();
+        for (int i = 0; i < sizeArray;i++){
+            String nombreStation = this.stations[i].getIdStation();
             if (nombreStation.equals(idStation)){
                 stationNotFound = false;
-                listaBikes = this.stations.get(i).getListaBikes();
+                listaBikes = this.stations[i].getListaBikes();
                 break;
             }
         }
-        Collections.sort(listaBikes, new Comparator<Bike>() {
-            public int compare(Bike o1, Bike o2) {
-                return (int)(o1.getKms()-o2.getKms());
-            }
-        });
-        if (stationNotFound == false){}
-        else{
-            throw new StationNotFoundException();
+
+        if (stationNotFound == false){
+            Collections.sort(listaBikes, new Comparator<Bike>() {
+                public int compare(Bike o1, Bike o2) {
+                    return (int)(o1.getKms()-o2.getKms());
+                }
+            });
+            log.info("The list of bikes from station ordered by Kms is:" +listaBikes);
+            return listaBikes;
         }
-        log.info("The list of bikes from station ordered by Kms is:" +listaBikes);
-        return listaBikes;
+        else{
+            log.warn("The station is not found");
+            throw new StationNotFoundException("The station is not found");
+        }
+
     }
 
     public Bike getBike(String stationId, String userId) throws UserNotFoundException, StationNotFoundException {
-        Bike bike = new Bike();
-
-        User user = userMap.get(userId);
-        if (user!= null){
-            log.info("The user is: " +userId);
-            boolean stationNotFound = true;
-            for (int i = 0; i < stations.size();i++){
-                String nombreStation = this.stations.get(i).getIdStation();
-                if (nombreStation.equals(stationId)){
-                    stationNotFound = false;
-                    bike = this.stations.get(i).listaBikes.pop();
-                    break;
-                }
+        Bike bike;
+        Station station = new Station();
+        boolean stationIsFound = false;
+        for(int i = 0; i < sizeArray; i++){
+            if (stationId.equals(stations[i].getIdStation())){
+                stationIsFound= true;
+                station = stations[i];
             }
-            if (stationNotFound == false){}
-            else {
-                throw new StationNotFoundException();
-            }
-            log.info("The bike added to user is: " +bike.getIdBike());
-            user.addBike(bike);
+        }
+        if(stationIsFound == false){
+            log.warn("The station is not found");
+            throw new StationNotFoundException("The station is not found");
         }
         else{
-            log.info("The user don't exist");
-            throw  new UserNotFoundException();
+            User user = userMap.get(userId);
+            if (user == null){
+                log.warn("The user don't exist");
+                throw  new UserNotFoundException("The user don't exist");
+            }
+            else{
+                bike = station.getBike();
+                user.addBike(bike);
+                log.info("The bike " +bike.getIdBike()+ " is added to user: " +userId);
+            }
         }
         return bike;
     }
@@ -180,13 +182,14 @@ public class MyBikeImpl implements  MyBike {
     public List<Bike> bikesByUser(String userId) throws UserNotFoundException {
         User user = userMap.get(userId);
         List<Bike> listaBikes;// = new LinkedList<>();
-        if (user!= null){
-            log.info("The user is: " +userId);
-            listaBikes = user.getListaBikes();
+        if (user == null){
+            log.warn("The user dn't exist");
+            throw new UserNotFoundException("The user don't exist");
         }
         else{
-            log.info("The user dn't exist");
-            throw new UserNotFoundException();
+            log.info("The user is: " +userId);
+            listaBikes = user.getListaBikes();
+
         }
         return listaBikes;
     }

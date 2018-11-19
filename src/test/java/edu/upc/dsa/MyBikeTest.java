@@ -37,7 +37,7 @@ public class MyBikeTest {
 
     @After
     public void tearDown(){
-        this.mb = null;
+        this.mb.clear();
     }
 
     @Test
@@ -116,6 +116,7 @@ public class MyBikeTest {
         Assert.assertEquals("bike201", bikes.get(1).getIdBike());
 
     }
+
 
 
 }
